@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../App'; // Asegúrate de importar correctamente
+import { RootStackParamList } from '../../App'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -9,18 +10,46 @@ const LoginScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const handleRegister = () => {
+  const Alerta = (title: string, message: string) => {
+    Alert.alert(title, message);
+  };
+
+  const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Por favor completa todos los campos obligatorios.');
+      Alerta('Error', 'Por favor completa todos los campos obligatorios.');
       return;
     }
 
-    // Lógica de registro
-    Alert.alert('¡Éxito!', '¡Cliente registrado correctamente!');
-    console.log('Registrarse:', { email, password });
-    
-    // Navegar a MainTabs
-    navigation.navigate('MainTabs');
+    try {
+      const response = await fetch('http://192.168.83.37:4000/ingresar', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ correo: email, contrasena: password }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        const datausuario = JSON.stringify(result.usuario);
+        await AsyncStorage.setItem('pruebasesion', datausuario);
+        Alerta('Éxito', 'Inicio de sesión exitoso');
+
+        setTimeout(() => {
+          if (result.usuario.rol === 1) {
+            navigation.navigate('MainTabsAdmi');
+          } else if (result.usuario.rol === 2) {
+            navigation.navigate('MainTabsVende');
+          }
+        }, 1500);
+      } else {
+        Alerta('Error', 'Usuario no encontrado, verifique los datos');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      Alerta('Error', 'Hubo un problema con el servidor');
+    }
   };
 
   return (
@@ -42,7 +71,7 @@ const LoginScreen = () => {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
     </ScrollView>

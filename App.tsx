@@ -12,10 +12,11 @@ export type RootStackParamList = {
   LoginScreen: { estado: boolean };
   RegisterProduct: { estado: boolean };
   RegisterAbono: { estado: boolean };
-  MainTabs: undefined;
+  MainTabsAdmi: undefined;
+  MainTabsVende: undefined;
   ProductStack: undefined;
   AbonoStack: undefined;
-  Logout: undefined; // Añadido Logout aquí
+  Logout: undefined; 
 };
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
@@ -35,7 +36,7 @@ const AbonoStack = () => (
   </Stack.Navigator>
 );
 
-const MainTabs = () => (
+const MainTabsAdmi = () => (
   <Tab.Navigator
     screenOptions={{
       tabBarActiveTintColor: '#05bcc1',
@@ -60,6 +61,34 @@ const MainTabs = () => (
         ),
       }}
     />
+    <Tab.Screen
+      name="Logout"
+      component={LogoutScreen}
+      options={{
+        title: 'Cerrar Sesión',
+        tabBarLabel: 'Cerrar Sesión',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="log-out-outline" color={color} size={size} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
+
+const MainTabsVende = () => (
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: '#05bcc1',
+      tabBarInactiveTintColor: '#888',
+      headerStyle: {
+        backgroundColor: '#05bcc1',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     <Tab.Screen
       name="AbonoStack"
       component={AbonoStack}
@@ -90,7 +119,8 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="MainTabs" component={MainTabs} />
+        <Stack.Screen name="MainTabsAdmi" component={MainTabsAdmi} />
+        <Stack.Screen name="MainTabsVende" component={MainTabsVende} />
       </Stack.Navigator>
     </NavigationContainer>
   );
