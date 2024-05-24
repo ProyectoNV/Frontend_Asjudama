@@ -1,0 +1,181 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
+const RegistrarVendedor = () => {
+  const [tipoDocumento, setTipoDocumento] = useState('');
+  const [numeroDocumento, setNumeroDocumento] = useState('');
+  const [rol, setRol] = useState('');
+  const [nombres, setNombres] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [celular, setCelular] = useState('');
+  const [fechaContratacion, setFechaContratacion] = useState('');
+
+  const validarFormulario = () => {
+    if (!tipoDocumento || !numeroDocumento || !rol || !nombres || !apellido || !correo || !celular || !fechaContratacion) {
+      Alert.alert("Error", "Todos los campos son obligatorios.");
+      return false;
+    }
+
+    const numeroDocumentoRegex = /^[0-9]+$/;
+    if (!numeroDocumentoRegex.test(numeroDocumento)) {
+      Alert.alert("Error", "El número de documento solo puede contener números.");
+      return false;
+    }
+
+    const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!fechaRegex.test(fechaContratacion)) {
+      Alert.alert("Error", "La fecha de contratación debe tener el formato AAAA-MM-DD.");
+      return false;
+    }
+
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!correoRegex.test(correo)) {
+      Alert.alert("Error", "El correo no es válido.");
+      return false;
+    }
+
+    const celularRegex = /^[0-9]+$/;
+    if (!celularRegex.test(celular)) {
+      Alert.alert("Error", "El número de celular solo puede contener números.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validarFormulario()) {
+      console.log({
+        tipoDocumento,
+        numeroDocumento,
+        rol,
+        nombres,
+        apellido,
+        correo,
+        celular,
+        fechaContratacion,
+      });
+      Alert.alert("Éxito", "Formulario enviado correctamente.");
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Registro de vendedor</Text>
+      
+      <Text style={styles.label}>Tipo Documento</Text>
+      <Picker
+        selectedValue={tipoDocumento}
+        onValueChange={(itemValue) => setTipoDocumento(itemValue)}
+        style={styles.input}
+      >
+        <Picker.Item label="CC" value="CC" />
+        <Picker.Item label="CE" value="CE" />
+        <Picker.Item label="Pasaporte" value="Pasaporte" />
+      </Picker>
+
+      <Text style={styles.label}>Numero Documento</Text>
+      <TextInput
+        style={styles.input}
+        value={numeroDocumento}
+        onChangeText={setNumeroDocumento}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.label}>Rol</Text>
+      <TextInput
+        style={styles.input}
+        value={rol}
+        onChangeText={setRol}
+      />
+
+      <Text style={styles.label}>Nombres</Text>
+      <TextInput
+        style={styles.input}
+        value={nombres}
+        onChangeText={setNombres}
+      />
+
+      <Text style={styles.label}>Apellido</Text>
+      <TextInput
+        style={styles.input}
+        value={apellido}
+        onChangeText={setApellido}
+      />
+
+      <Text style={styles.label}>Correo</Text>
+      <TextInput
+        style={styles.input}
+        value={correo}
+        onChangeText={setCorreo}
+        keyboardType="email-address"
+      />
+
+      <Text style={styles.label}>Celular</Text>
+      <TextInput
+        style={styles.input}
+        value={celular}
+        onChangeText={setCelular}
+        keyboardType="phone-pad"
+      />
+
+      <Text style={styles.label}>Fecha Contratación</Text>
+      <TextInput
+        style={styles.input}
+        value={fechaContratacion}
+        onChangeText={setFechaContratacion}
+        placeholder="AAAA-MM-DD"
+      />
+
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: 'red' }]} 
+        onPress={handleSubmit}
+      >
+        <Text style={styles.buttonText}>Enviar</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    color: "#05bcc1",
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  label: {
+    marginTop: 20,
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+export default RegistrarVendedor;
