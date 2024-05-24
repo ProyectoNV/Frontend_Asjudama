@@ -3,47 +3,48 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert 
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App'; // Asegúrate de importar correctamente
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const RegisterAbono = () => {
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleRegister = () => {
-    if (!email || !password) {
+    if (!amount || !description) {
       Alert.alert('Error', 'Por favor completa todos los campos obligatorios.');
       return;
     }
 
+    const amountRegex = /^[0-9]+$/;
+    if (!amountRegex.test(amount)) {
+      Alert.alert('Error', 'Por favor ingresa un monto válido (solo números).');
+      return;
+    }
+
     // Lógica de registro
-    Alert.alert('¡Éxito!', '¡Cliente registrado correctamente!');
-    console.log('Registrarse:', { email, password });
-    
-    // Navegar a MainTabs
-    navigation.navigate('MainTabs');
+    Alert.alert('¡Éxito!', '¡Abono registrado correctamente!');
+    console.log('Registrar abono:', { amount, description });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Ingreso</Text>
+      <Text style={styles.title}>Registrar Abono</Text>
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Correo electrónico"
-          onChangeText={text => setEmail(text)}
-          value={email}
-          keyboardType="email-address"
+          placeholder="Monto"
+          onChangeText={text => setAmount(text)}
+          value={amount}
         />
         <TextInput
           style={styles.input}
-          placeholder="Contraseña"
-          onChangeText={text => setPassword(text)}
-          value={password}
-          secureTextEntry
+          placeholder="Descripción"
+          onChangeText={text => setDescription(text)}
+          value={description}
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        <Text style={styles.buttonText}>Registrar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -61,8 +62,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 30,
     color: '#85C1E9',
-    textTransform: 'uppercase',
-    textAlign: 'center',
   },
   formContainer: {
     marginBottom: 30,
@@ -91,8 +90,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 22,
     fontWeight: 'bold',
-    textTransform: 'uppercase',
   },
 });
 
-export default LoginScreen;
+export default RegisterAbono;

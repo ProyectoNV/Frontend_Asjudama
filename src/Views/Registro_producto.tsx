@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../App'; // Asegúrate de importar correctamente
 
 const RegisterProduct = () => {
   const [nameproduct, setNameproduct] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripción, setDireccion] = useState('');
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleRegister = () => {
     if (!nameproduct || !precio || !descripción) {
@@ -18,7 +22,6 @@ const RegisterProduct = () => {
       return;
     }
 
-
     const numDocRegex = /^[0-9]+$/;
     if (!numDocRegex.test(precio)) {
       Alert.alert('Error', 'Por favor ingresa un precio válido (solo números).');
@@ -29,6 +32,7 @@ const RegisterProduct = () => {
     Alert.alert('¡Éxito!', '¡Cliente registrado correctamente!');
     console.log('Registrarse:', { nameproduct, precio, descripción });
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,7 +67,7 @@ const RegisterProduct = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fdf3ec',
     paddingHorizontal: 30,
     paddingTop: 50,
   },
@@ -71,9 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: '#007bff',
-    textTransform: 'uppercase',
-    textAlign: 'center',
+    color: '#85C1E9',
   },
   formContainer: {
     marginBottom: 30,
@@ -81,9 +83,9 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#D3D3D3',
     borderRadius: 10,
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 60,
-    backgroundColor: '#007bff',
+    backgroundColor: '#FF6347',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -102,8 +104,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 22,
     fontWeight: 'bold',
-    textTransform: 'uppercase',
   },
 });
 
-export default RegisterProduct
+export default RegisterProduct;

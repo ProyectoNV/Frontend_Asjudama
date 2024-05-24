@@ -1,46 +1,96 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/Views/Login';
 import RegisterProduct from './src/Views/Registro_producto';
+import RegisterAbono from './src/Views/Abonos';
+import LogoutScreen from './src/Views/LogoutScreen'; // Asegúrate de importar correctamente
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export type RootStackParamList = {
   LoginScreen: { estado: boolean };
   RegisterProduct: { estado: boolean };
-  // Agrega más pantallas aquí según sea necesario
+  RegisterAbono: { estado: boolean };
+  MainTabs: undefined;
+  ProductStack: undefined;
+  AbonoStack: undefined;
+  Logout: undefined; // Añadido Logout aquí
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
+
+const ProductStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
+    <Stack.Screen name="LoginScreen" component={LoginScreen} />
+  </Stack.Navigator>
+);
+
+const AbonoStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="RegisterAbono" component={RegisterAbono} />
+    <Stack.Screen name="LoginScreen" component={LoginScreen} />
+  </Stack.Navigator>
+);
+
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: '#05bcc1',
+      tabBarInactiveTintColor: '#888',
+      headerStyle: {
+        backgroundColor: '#05bcc1',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <Tab.Screen
+      name="ProductStack"
+      component={ProductStack}
+      options={{
+        title: 'Registrar Productos',
+        tabBarLabel: 'Registrar Productos',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="AbonoStack"
+      component={AbonoStack}
+      options={{
+        title: 'Registrar Abonos',
+        tabBarLabel: 'Registrar Abonos',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Logout"
+      component={LogoutScreen}
+      options={{
+        title: 'Cerrar Sesión',
+        tabBarLabel: 'Cerrar Sesión',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="log-out-outline" color={color} size={size} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#05bcc1', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}>
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{
-            title: 'Login',
-            headerShown: false,  // Oculta la barra de navegación en la pantalla de inicio de sesión
-          }}
-          initialParams={{ estado: false }}
-        />
-        <Stack.Screen
-          name="RegisterProduct"
-          component={RegisterProduct}
-          options={{
-            title: 'Registrar Productos',
-          }}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );
