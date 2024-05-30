@@ -11,7 +11,7 @@ const ClienteInformacion = () => {
 
     const fetchUsuarios = async () => {
         try {
-            const response = await axios.get('http://192.168.99.146:4000/vendedor/mostrarClientes');
+            const response = await axios.get('http://192.168.209.37:4000/vendedor/mostrarClientes');
             setUsuarios(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);

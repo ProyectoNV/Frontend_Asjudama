@@ -8,6 +8,9 @@ import RegisterAbono from './src/Views/Abonos';
 import LogoutScreen from './src/Views/LogoutScreen';
 import InformeClientes from './src/Views/InformeClientes';
 import InformeVentasVendedor from './src/Views/InformeVentasVendedor';
+import HistorialUser from './src/Views/actualizar_clientes';
+import ClienteInformacion from './src/Views/clientes';
+import RegisterForm from './src/Views/registro_cliente';
 import RegistrarVendedor from './src/Views/RegistrarVendedor';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -18,6 +21,9 @@ export type RootStackParamList = {
   InformeVentasVendedor: {estado: boolean};
   InformeClientes: {estado: boolean};
   RegistrarVendedor: {estado: boolean};
+  HistorialUser: {estado: boolean};
+  ClienteInformacion: {estado: boolean};
+  RegisterForm: {estado: boolean};
   MainTabsAdmi: undefined;
   MainTabsVende: undefined;
   ProductStack: undefined;
@@ -31,17 +37,20 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const ProductStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
-    <Stack.Screen name="LoginScreen" component={LoginScreen} />
-    <Stack.Screen name="InformeVentasVendedor" component={InformeVentasVendedor} />
-    <Stack.Screen name="InformeClientes" component={InformeClientes} />
-    <Stack.Screen name="RegistrarVendedor" component={RegistrarVendedor} />
+    <Stack.Screen name="RegisterProduct" component={RegisterProduct}/>
+    <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+    <Stack.Screen name="InformeVentasVendedor" component={InformeVentasVendedor}/>
+    <Stack.Screen name="InformeClientes" component={InformeClientes}/>
+    <Stack.Screen name="RegistrarVendedor" component={RegistrarVendedor}/>
   </Stack.Navigator>
 );
 
 const AbonoStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="RegisterAbono" component={RegisterAbono} />
+    <Stack.Screen name="HistorialUser" component={HistorialUser}/>
+    <Stack.Screen name="RegisterForm" component={RegisterForm}/>
+    <Stack.Screen name="ClienteInformacion" component={ClienteInformacion}/>
     <Stack.Screen name="LoginScreen" component={LoginScreen} />
   </Stack.Navigator>
 );
@@ -138,6 +147,39 @@ const MainTabsVende = () => (
       options={{
         title: 'Registrar Abonos',
         tabBarLabel: 'Registrar Abonos',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="RegisterForm"
+      component={RegisterForm}
+      options={{
+        title: 'Registrar Clientes',
+        tabBarLabel: 'Registrar Clientes',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="HistorialUser"
+      component={HistorialUser}
+      options={{
+        title: 'Actualizar Clientes',
+        tabBarLabel: 'Actualizar Clientes',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="ClienteInformacion"
+      component={ClienteInformacion}
+      options={{
+        title: 'Información Clientes',
+        tabBarLabel: 'Información Clientes',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
         ),

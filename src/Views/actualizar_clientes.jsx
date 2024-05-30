@@ -39,7 +39,7 @@ export const HistorialUser = () => {
         }
 
         try {
-            const respuesta = await axios.put(`http://192.168.99.146:4000/vendedor/actualizarClientes`, Historial);
+            const respuesta = await axios.put(`http://192.168.209.37:4000/vendedor/actualizarClientes`, Historial);
             if (respuesta.status === 200) {
                 setHistorial({
                     pkfk_tdoc: '',
@@ -60,7 +60,7 @@ export const HistorialUser = () => {
 
     const handleEstado = async () => {
         try {
-            const respuesta = await axios.put(`http://192.168.99.146:4000/vendedor/actualizarEstado/${Historial.numero_id}`, { estado: (Historial.estado) === 0 ? 1 : 0 });
+            const respuesta = await axios.put(`http://192.168.209.37:4000/vendedor/actualizarEstado/${Historial.numero_id}`, { estado: (Historial.estado) === 0 ? 1 : 0 });
             if (respuesta.status === 200) {
                 setHistorial({
                     pkfk_tdoc: '',
@@ -81,7 +81,7 @@ export const HistorialUser = () => {
 
     const handleBuscar = async () => {
         try {
-            const respuesta = await axios.get(`http://192.168.99.146:4000/vendedor/consultar_id/${Historial.numero_id}`);
+            const respuesta = await axios.get(`http://192.168.209.37:4000/vendedor/consultar_id/${Historial.numero_id}`);
             if (respuesta.status === 200) {
                 setHistorial(respuesta.data);
             } else {
@@ -165,7 +165,7 @@ export const HistorialUser = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        background: '#fdf3ec', // Fondo rosa
+        backgroundColor: '#fdf3ec', 
         paddingHorizontal: 30,
         paddingTop: 50,
     },

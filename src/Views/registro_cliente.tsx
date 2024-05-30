@@ -21,7 +21,7 @@ const RegisterForm = () => {
     }
 
     try {
-      const response = await axios.post('http://192.168.99.146:4000/vendedor/registarClientes', {
+      const response = await axios.post('http://192.168.209.37:4000/vendedor/registarClientes', {
         pkfk_tdoc: tdoc,
         numero_id: identificacion,
         Nombres: username,
