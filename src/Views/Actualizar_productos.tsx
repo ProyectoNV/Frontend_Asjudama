@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../App'; // Asegúrate de importar correctamente
+import { useNavigation, NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '../../App';
 
 const ActualizarProduct = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'ActualizarProduct'>>();
+  const { id_producto } = route.params; // Obtén el id_producto de los parámetros de la ruta
   const [nameproduct, setNameproduct] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [listUpdated, setListUpdated] = useState(false)
+  const [listUpdated, setListUpdated] = useState(false);
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const actuaproduct = async () => {
         try{
-            const getActualizar = await fetch(`http://192.168.209.37:4000/admin/Buscar_producto/1`);
+            const getActualizar = await fetch(`http://192.168.209.37:4000/admin/Buscar_producto/${id_producto}`);
             const dataActualizar= await getActualizar.json();
             if (getActualizar.status === 200) {
                 setNameproduct(dataActualizar[0].nombre_producto || '');
@@ -23,13 +25,11 @@ const ActualizarProduct = () => {
             }
         }catch(error){
             console.log(error);
-        }       
+        }
     }
-    actuaproduct()
+    actuaproduct();
     setListUpdated(false);
-}, [listUpdated])
-
-
+}, [id_producto, listUpdated]);
 
   const handleActualizar = async () => {
     if (!nameproduct || !precio || !descripcion) {
@@ -50,7 +50,7 @@ const ActualizarProduct = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.209.37:4000/admin/actualizar_producto/1', {
+      const response = await fetch(`http://192.168.209.37:4000/admin/actualizar_producto/${id_producto}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ const ActualizarProduct = () => {
         body: JSON.stringify({
           nombre_producto: nameproduct,
           valor_unitario: precio,
-          descripcion_producto: descripcion, 
+          descripcion_producto: descripcion,
         })
       });
 

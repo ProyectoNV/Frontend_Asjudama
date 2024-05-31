@@ -84,6 +84,9 @@ const RegisterProduct = () => {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrar</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Productos_Lista', { estado: true })}>
+        <Text style={styles.buttonText}>Ver Productos</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -123,6 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',
