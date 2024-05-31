@@ -3,7 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert 
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
-const RegisterForm = () => {
+
+const RegisterForm: React.FC = () => {
+  
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,16 +14,35 @@ const RegisterForm = () => {
   const [apellidos, setApellidos] = useState('');
   const [celular, setCelular] = useState('');
   const [direccion, setDireccion] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(true);
 
   const handleRegister = async () => {
+    
     if (!username || !email || !password || !tdoc || !identificacion || !apellidos || !celular || !direccion) {
       Alert.alert('Error', 'Por favor completa todos los campos.');
       return;
     }
+    if (username.trim().split(/\s+/).length < 1 || apellidos.trim().split(/\s+/).length < 2) {
+      Alert.alert('Caracteres insuficientes', 'Por favor, ingresa los nombres completos.');
+      return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(username) || !/^[a-zA-Z\s]+$/.test(apellidos)) {
+      Alert.alert('Error', 'Los campos de nombre y apellidos deben contener solo letras y espacios.');
+      return;
+    }
+
+    if (!/^\d+$/.test(identificacion) || !/^\d+$/.test(celular)) {
+      Alert.alert('Error', 'Los campos de número de documento y número de celular deben contener solo números.');
+      return;
+    }
+    
+    if (!/@/.test(email)) {
+      Alert.alert('Error', 'El campo de correo electrónico debe contener un @.');
+      return;
+    }
 
     try {
-      const response = await axios.post('http://192.168.99.146:4000/vendedor/registarClientes', {
+      const response = await axios.post('http://192.168.1.9:4000/vendedor/registarClientes', {
         pkfk_tdoc: tdoc,
         numero_id: identificacion,
         Nombres: username,
@@ -57,9 +78,19 @@ const RegisterForm = () => {
     setDireccion('');
   };
 
+  const handleNumericInput = (text: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    if (/^\d*$/.test(text)) {
+      setter(text);
+    }
+  };
+
+  const handleViewCustomers = () => {
+    // Implementa la lógica para ver clientes aquí
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Regístrate </Text>
+      <Text style={styles.title}>Regístrate</Text>
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
@@ -74,14 +105,14 @@ const RegisterForm = () => {
           value={apellidos}
         />
         <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        onChangeText={text => setEmail(text)}
-        value={email}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+          style={styles.input}
+          placeholder="Correo electrónico"
+          onChangeText={text => setEmail(text)}
+          value={email}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
         <TextInput
           style={styles.input}
           placeholder="Contraseña"
@@ -103,14 +134,16 @@ const RegisterForm = () => {
         <TextInput
           style={styles.input}
           placeholder="Número de documento"
-          onChangeText={text => setIdentificacion(text)}
+          onChangeText={text => handleNumericInput(text, setIdentificacion)}
           value={identificacion}
+          keyboardType="default"
         />
         <TextInput
           style={styles.input}
           placeholder="Número de celular"
-          onChangeText={text => setCelular(text)}
+          onChangeText={text => handleNumericInput(text, setCelular)}
           value={celular}
+          keyboardType="default"
         />
         <TextInput
           style={styles.input}
@@ -120,7 +153,10 @@ const RegisterForm = () => {
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse </Text>
+        <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.viewCustomersButton} onPress={handleViewCustomers}>
+        <Text style={styles.buttonText}>Ver Clientes</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -161,6 +197,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    marginBottom: 10,
+  },
+  viewCustomersButton: {
+    width: '100%',
+    height: 60,
+    backgroundColor: '#05bcc1',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
