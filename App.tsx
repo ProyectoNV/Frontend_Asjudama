@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/Views/Login';
 import RegisterProduct from './src/Views/Registro_producto';
+import Productos_Lista from './src/Views/Lista_Productos';
+import ActualizarProduct from './src/Views/Actualizar_productos';
 import RegisterAbono from './src/Views/Abonos';
 import LogoutScreen from './src/Views/LogoutScreen';
 import InformeClientes from './src/Views/InformeClientes';
@@ -17,6 +19,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 export type RootStackParamList = {
   LoginScreen: { estado: boolean };
   RegisterProduct: { estado: boolean };
+  Productos_Lista: {estado: boolean};
+  ActualizarProduct: {id_producto: number};
   RegisterAbono: { estado: boolean };
   InformeVentasVendedor: {estado: boolean};
   InformeClientes: {estado: boolean};
@@ -42,6 +46,8 @@ const ProductStack = () => (
     <Stack.Screen name="InformeVentasVendedor" component={InformeVentasVendedor}/>
     <Stack.Screen name="InformeClientes" component={InformeClientes}/>
     <Stack.Screen name="RegistrarVendedor" component={RegistrarVendedor}/>
+    <Stack.Screen name="Productos_Lista" component={Productos_Lista}/>
+    <Stack.Screen name="ActualizarProduct" component={ActualizarProduct}/>
   </Stack.Navigator>
 );
 
@@ -73,8 +79,8 @@ const MainTabsAdmi = () => (
       name="ProductStack"
       component={ProductStack}
       options={{
-        title: 'Registrar Productos',
-        tabBarLabel: 'Registrar Productos',
+        title: 'Productos',
+        tabBarLabel: 'Productos',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
         ),
@@ -95,8 +101,8 @@ const MainTabsAdmi = () => (
       name="InformeVentasVendedor"
       component={InformeVentasVendedor}
       options={{
-        title: 'Informe de Ventas por Vendedor',
-        tabBarLabel: 'Informe de Ventas por Vendedor',
+        title: 'Ventas',
+        tabBarLabel: 'Ventas',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
         ),
@@ -106,8 +112,8 @@ const MainTabsAdmi = () => (
       name="InformeClientes"
       component={InformeClientes}
       options={{
-        title: 'Informe de Clientes',
-        tabBarLabel: 'Informe de Clientes',
+        title: 'Clientes',
+        tabBarLabel: 'Clientes',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
         ),
@@ -117,8 +123,8 @@ const MainTabsAdmi = () => (
       name="RegistrarVendedor"
       component={RegistrarVendedor}
       options={{
-        title: 'Registrar Vendedores',
-        tabBarLabel: 'Registrar Vendedores',
+        title: 'Vendedores',
+        tabBarLabel: 'Vendedores',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
         ),
