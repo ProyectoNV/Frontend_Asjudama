@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   viewCustomersButton: {
     width: '100%',
     height: 60,
-    backgroundColor: '#05bcc1',
+    backgroundColor: '#FF6347',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
