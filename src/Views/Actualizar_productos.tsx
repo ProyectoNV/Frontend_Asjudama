@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App'; // Asegúrate de importar correctamente
 
-const RegisterProduct = () => {
+const ActualizarProduct = () => {
   const [nameproduct, setNameproduct] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
+  const [listUpdated, setListUpdated] = useState(false)
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const handleRegister = async () => {
+  useEffect(() => {
+    const actuaproduct = async () => {
+        try{
+            const getActualizar = await fetch(`http://192.168.209.37:4000/admin/Buscar_producto/1`);
+            const dataActualizar= await getActualizar.json();
+            if (getActualizar.status === 200) {
+                setNameproduct(dataActualizar[0].nombre_producto || '');
+                setPrecio(dataActualizar[0].valor_unitario || '');
+                setDescripcion(dataActualizar[0].descripcion_producto || '');
+            }
+        }catch(error){
+            console.log(error);
+        }       
+    }
+    actuaproduct()
+    setListUpdated(false);
+}, [listUpdated])
+
+
+
+  const handleActualizar = async () => {
     if (!nameproduct || !precio || !descripcion) {
       Alert.alert('Error', 'Por favor completa todos los campos obligatorios.');
       return;
@@ -22,33 +43,32 @@ const RegisterProduct = () => {
       return;
     }
 
-    const numDocRegex = /^[0-9]+$/;
+    const numDocRegex = /^\d+(\.\d{1,2})?$/;
     if (!numDocRegex.test(precio)) {
       Alert.alert('Error', 'Por favor ingresa un precio válido (solo números).');
       return;
     }
 
     try {
-      const response = await fetch('http://192.168.209.37:4000/admin/registro_producto', {
-        method: 'POST',
+      const response = await fetch('http://192.168.209.37:4000/admin/actualizar_producto/1', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           nombre_producto: nameproduct,
           valor_unitario: precio,
-          descripcion_producto: descripcion,
-          estado_producto: '1' 
+          descripcion_producto: descripcion, 
         })
       });
 
       if (response.ok) {
         const result = await response.json();
-        Alert.alert('¡Éxito!', '¡Producto registrado correctamente!');
+        Alert.alert('¡Éxito!', '¡Producto actualizado correctamente!');
         console.log('Registrado:', result);
       } else {
         const error = await response.json();
-        Alert.alert('Error', 'Hubo un problema al registrar el producto.');
+        Alert.alert('Error', 'Hubo un problema al actualizar el producto.');
         console.error('Error:', error);
       }
     } catch (error) {
@@ -59,7 +79,7 @@ const RegisterProduct = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Regístra un producto</Text>
+      <Text style={styles.title}>Actualiza un producto</Text>
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
@@ -81,8 +101,8 @@ const RegisterProduct = () => {
           value={descripcion}
         />
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrar</Text>
+      <TouchableOpacity style={styles.button} onPress={handleActualizar}>
+        <Text style={styles.buttonText}>Actualizar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -131,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterProduct;
+export default ActualizarProduct;
