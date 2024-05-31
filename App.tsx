@@ -170,28 +170,6 @@ const MainTabsVende = () => (
       }}
     />
     <Tab.Screen
-      name="HistorialUser"
-      component={HistorialUser}
-      options={{
-        title: 'Actualizar Clientes',
-        tabBarLabel: 'Actualizar Clientes',
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="ClienteInformacion"
-      component={ClienteInformacion}
-      options={{
-        title: 'Información Clientes',
-        tabBarLabel: 'Información Clientes',
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
-        ),
-      }}
-    />
-    <Tab.Screen
       name="Logout"
       component={LogoutScreen}
       options={{

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../App';
 import axios from 'axios';
 
 interface Usuario {
@@ -13,13 +15,15 @@ interface Usuario {
 const ClienteInformacion: React.FC = () => {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
     useEffect(() => {
         fetchUsuarios();
     }, []);
 
     const fetchUsuarios = async () => {
         try {
-            const response = await axios.get<Usuario[]>('http://192.168.1.9:4000/vendedor/mostrarClientes');
+            const response = await axios.get<Usuario[]>('http://192.168.209.37:4000/vendedor/mostrarClientes');
             setUsuarios(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -46,7 +50,7 @@ const ClienteInformacion: React.FC = () => {
                     </View>
                 )}
             />
-            <TouchableOpacity style={styles.button} onPress={handleActualizarClientes}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HistorialUser', { estado: true })}>
                 <Text style={styles.buttonText}>Actualizar Clientes</Text>
             </TouchableOpacity>
         </View>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../App';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
@@ -15,15 +17,36 @@ const RegisterForm: React.FC = () => {
   const [celular, setCelular] = useState('');
   const [direccion, setDireccion] = useState('');
 
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const handleRegister = async () => {
     
     if (!username || !email || !password || !tdoc || !identificacion || !apellidos || !celular || !direccion) {
       Alert.alert('Error', 'Por favor completa todos los campos.');
       return;
     }
+    if (username.trim().split(/\s+/).length < 1 || apellidos.trim().split(/\s+/).length < 2) {
+      Alert.alert('Caracteres insuficientes', 'Por favor, ingresa los nombres completos.');
+      return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(username) || !/^[a-zA-Z\s]+$/.test(apellidos)) {
+      Alert.alert('Error', 'Los campos de nombre y apellidos deben contener solo letras y espacios.');
+      return;
+    }
+
+    if (!/^\d+$/.test(identificacion) || !/^\d+$/.test(celular)) {
+      Alert.alert('Error', 'Los campos de número de documento y número de celular deben contener solo números.');
+      return;
+    }
+    
+    if (!/@/.test(email)) {
+      Alert.alert('Error', 'El campo de correo electrónico debe contener un @.');
+      return;
+    }
 
     try {
-      const response = await axios.post('http://192.168.99.146:4000/vendedor/registarClientes', {
+      const response = await axios.post('http://192.168.209.37:4000/vendedor/registarClientes', {
         pkfk_tdoc: tdoc,
         numero_id: identificacion,
         Nombres: username,
@@ -134,7 +157,7 @@ const RegisterForm: React.FC = () => {
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.viewCustomersButton} >
-        <Text style={styles.buttonText}>Ver Clientes</Text>
+        <Text style={styles.buttonText} onPress={() => navigation.navigate('ClienteInformacion', { estado: true })}>Ver Clientes</Text>
       </TouchableOpacity>
     </ScrollView>
   );
