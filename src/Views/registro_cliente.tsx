@@ -84,9 +84,6 @@ const RegisterForm: React.FC = () => {
     }
   };
 
-  const handleViewCustomers = () => {
-    // Implementa la lógica para ver clientes aquí
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -155,7 +152,7 @@ const RegisterForm: React.FC = () => {
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.viewCustomersButton} onPress={handleViewCustomers}>
+      <TouchableOpacity style={styles.viewCustomersButton} >
         <Text style={styles.buttonText}>Ver Clientes</Text>
       </TouchableOpacity>
     </ScrollView>
