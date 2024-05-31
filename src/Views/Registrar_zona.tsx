@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../App';
 
-const Registrofor = ({ navigation }) => {
+interface Zona {
+  nombre_zona: string;
+  descripcion_zona: string;
+  ubicacion_zona: string;
+  tipo_zona: string;
+}
+
+const Registrofor = () => {
   const [nombreZona, setNombreZona] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [ubicacion, setUbicacion] = useState('');
   const [tipoZona, setTipoZona] = useState('residencial');
-  const [zonas, setZonas] = useState([]);
+  const [zonas, setZonas] = useState<Zona[]>([]);
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleRegister = async () => {
     if (!nombreZona || !descripcion || !ubicacion) {
@@ -16,14 +27,14 @@ const Registrofor = ({ navigation }) => {
     }
 
     try {
-      const zonaNueva = {
+      const zonaNueva: Zona = {
         nombre_zona: nombreZona,
         descripcion_zona: descripcion,
         ubicacion_zona: ubicacion,
         tipo_zona: tipoZona,
       };
 
-      const response = await fetch('http://192.168.1.103:4000/admin/registrar', {
+      const response = await fetch('http://192.168.209.37:4000/admin/registrar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,12 +60,12 @@ const Registrofor = ({ navigation }) => {
   };
 
   const handleViewZones = () => {
-    navigation.navigate('Zona', { zonas });
+    navigation.navigate('lista_Zona', { estado: true });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.viewButton} onPress={handleViewZones}>
+      <TouchableOpacity style={styles.viewButton} onPress={() => navigation.navigate('lista_Zona', { estado: true })}>
         <Text style={styles.viewButtonText}>Ver Zonas</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Registro de Zonas</Text>

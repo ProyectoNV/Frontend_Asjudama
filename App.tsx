@@ -12,6 +12,8 @@ import InformeClientes from './src/Views/InformeClientes';
 import InformeVentasVendedor from './src/Views/InformeVentasVendedor';
 import HistorialUser from './src/Views/actualizar_clientes';
 import ClienteInformacion from './src/Views/clientes';
+import Registrofor from './src/Views/Registrar_zona';
+import lista_Zona from './src/Views/Zonas_Regis';
 import RegisterForm from './src/Views/registro_cliente';
 import RegistrarVendedor from './src/Views/RegistrarVendedor';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,6 +30,8 @@ export type RootStackParamList = {
   HistorialUser: {estado: boolean};
   ClienteInformacion: {estado: boolean};
   RegisterForm: {estado: boolean};
+  Registrofor: {estado:boolean};
+  lista_Zona: {estado:boolean};
   MainTabsAdmi: undefined;
   MainTabsVende: undefined;
   ProductStack: undefined;
@@ -48,6 +52,8 @@ const ProductStack = () => (
     <Stack.Screen name="RegistrarVendedor" component={RegistrarVendedor}/>
     <Stack.Screen name="Productos_Lista" component={Productos_Lista}/>
     <Stack.Screen name="ActualizarProduct" component={ActualizarProduct}/>
+    <Stack.Screen name="Registrofor" component={Registrofor}/>
+    <Stack.Screen name="lista_Zona" component={lista_Zona}/>
   </Stack.Navigator>
 );
 
@@ -87,13 +93,13 @@ const MainTabsAdmi = () => (
       }}
     />
     <Tab.Screen
-      name="Logout"
-      component={LogoutScreen}
+      name="Registrofor"
+      component={Registrofor}
       options={{
-        title: 'Cerrar Sesión',
-        tabBarLabel: 'Cerrar Sesión',
+        title: 'Zonas',
+        tabBarLabel: 'Zonas',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="log-out-outline" color={color} size={size} />
+          <Icon name="add-circle-outline" color={color} size={size} />
         ),
       }}
     />
@@ -127,6 +133,17 @@ const MainTabsAdmi = () => (
         tabBarLabel: 'Vendedores',
         tabBarIcon: ({ color, size }) => (
           <Icon name="add-circle-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Logout"
+      component={LogoutScreen}
+      options={{
+        title: 'Cerrar Sesión',
+        tabBarLabel: 'Cerrar Sesión',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="log-out-outline" color={color} size={size} />
         ),
       }}
     />

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from '../../App';
-
-//winterface Props extends StackScreenProps<RootStackParamList, "> {}
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 const lista_Zona = () => {
 
@@ -11,10 +10,12 @@ const lista_Zona = () => {
     const [zonass, setZonass] = useState([]);
     const [zonassi, setZonassi] = useState([]);
 
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
     useEffect(() => {
         const listZona = async () => {
             try {
-                const getzona = await fetch('http://192.168.1.103:4000/admin/ver_zona');
+                const getzona = await fetch('http://192.168.209.37:4000/admin/ver_zona');
                 const datazona = await getzona.json();
                 setZonass(datazona);
             } catch (error) {
@@ -24,7 +25,7 @@ const lista_Zona = () => {
 
         const listZonasi = async () => {
             try {
-                const getzonasi = await fetch('http://192.168.1.103:4000/admin/ver_zona_I');
+                const getzonasi = await fetch('http://192.168.209.37:4000/admin/ver_zona_I');
                 const datazonasi = await getzonasi.json();
                 setZonassi(datazonasi);
             } catch (error) {
@@ -39,7 +40,7 @@ const lista_Zona = () => {
 
     const CambiarEstadoZ = async (id_zona: number) => {
         try {
-            const response = await fetch(`http://192.168.1.103:4000/admin/actualizar/${id_zona}`, {
+            const response = await fetch(`http://192.168.209.37:4000/admin/actualizar/${id_zona}`, {
                 method: 'PUT',
             });
 
