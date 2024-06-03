@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
+import axios from 'axios';
 const RegistrarVendedor = () => {
   const [tipoDocumento, setTipoDocumento] = useState('');
   const [numeroDocumento, setNumeroDocumento] = useState('');
@@ -45,9 +45,9 @@ const RegistrarVendedor = () => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validarFormulario()) {
-      console.log({
+      const vendedor = {
         tipoDocumento,
         numeroDocumento,
         rol,
@@ -56,8 +56,22 @@ const RegistrarVendedor = () => {
         correo,
         celular,
         fechaContratacion,
-      });
-      Alert.alert("Éxito", "Formulario enviado correctamente.");
+      };
+      console.log(vendedor);
+      try {
+        const respuesta = await axios.post('http://192.168.209.37:4000/admin/registrarvendedor', vendedor);
+        console.log(respuesta.data);
+        if (respuesta.data.success===true) {
+          Alert.alert("Éxito", respuesta.data.message);
+        } else {
+          Alert.alert("Error", respuesta.data.message);
+        }
+      } catch (error) {
+        console.log("Error al registrar: ", error);
+        Alert.alert("Error", "Se produjo un error al registrar el vendedor.");
+      }
+    } else {
+      console.log("Sigue un error");
     }
   };
 
@@ -71,6 +85,7 @@ const RegistrarVendedor = () => {
         onValueChange={(itemValue) => setTipoDocumento(itemValue)}
         style={styles.input}
       >
+        <Picker.Item label="Permiso especial" value="PE" />
         <Picker.Item label="CC" value="CC" />
         <Picker.Item label="CE" value="CE" />
         <Picker.Item label="Pasaporte" value="Pasaporte" />

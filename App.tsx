@@ -88,7 +88,7 @@ const MainTabsAdmi = () => (
         title: 'Productos',
         tabBarLabel: 'Productos',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="cube-outline" color={color} size={size} />
         ),
       }}
     />
@@ -99,7 +99,7 @@ const MainTabsAdmi = () => (
         title: 'Zonas',
         tabBarLabel: 'Zonas',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="map-outline" color={color} size={size} />
         ),
       }}
     />
@@ -110,7 +110,7 @@ const MainTabsAdmi = () => (
         title: 'Ventas',
         tabBarLabel: 'Ventas',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="stats-chart-outline" color={color} size={size} />
         ),
       }}
     />
@@ -121,7 +121,7 @@ const MainTabsAdmi = () => (
         title: 'Clientes',
         tabBarLabel: 'Clientes',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="people-outline" color={color} size={size} />
         ),
       }}
     />
@@ -132,7 +132,7 @@ const MainTabsAdmi = () => (
         title: 'Vendedores',
         tabBarLabel: 'Vendedores',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="person-outline" color={color} size={size} />
         ),
       }}
     />
@@ -171,7 +171,7 @@ const MainTabsVende = () => (
         title: 'Registrar Abonos',
         tabBarLabel: 'Registrar Abonos',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="cash-outline" color={color} size={size} />
         ),
       }}
     />
@@ -182,7 +182,7 @@ const MainTabsVende = () => (
         title: 'Registrar Clientes',
         tabBarLabel: 'Registrar Clientes',
         tabBarIcon: ({ color, size }) => (
-          <Icon name="add-circle-outline" color={color} size={size} />
+          <Icon name="people-outline" color={color} size={size} />
         ),
       }}
     />
