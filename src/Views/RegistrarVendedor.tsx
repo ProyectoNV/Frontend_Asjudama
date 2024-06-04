@@ -5,7 +5,6 @@ import axios from 'axios';
 const RegistrarVendedor = () => {
   const [tipoDocumento, setTipoDocumento] = useState('');
   const [numeroDocumento, setNumeroDocumento] = useState('');
-  const [rol, setRol] = useState('');
   const [nombres, setNombres] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -13,7 +12,7 @@ const RegistrarVendedor = () => {
   const [fechaContratacion, setFechaContratacion] = useState('');
 
   const validarFormulario = () => {
-    if (!tipoDocumento || !numeroDocumento || !rol || !nombres || !apellido || !correo || !celular || !fechaContratacion) {
+    if (!tipoDocumento || !numeroDocumento || !nombres || !apellido || !correo || !celular || !fechaContratacion) {
       Alert.alert("Error", "Todos los campos son obligatorios.");
       return false;
     }
@@ -50,7 +49,6 @@ const RegistrarVendedor = () => {
       const vendedor = {
         tipoDocumento,
         numeroDocumento,
-        rol,
         nombres,
         apellido,
         correo,
@@ -61,8 +59,16 @@ const RegistrarVendedor = () => {
       try {
         const respuesta = await axios.post('http://localhost:4000/admin/registrarvendedor', vendedor);
         console.log(respuesta.data);
-        if (respuesta.data.success===true) {
+        if (respuesta.data.success==true) {
           Alert.alert("Éxito", respuesta.data.message);
+
+          setTipoDocumento('');
+          setNumeroDocumento('');
+          setNombres('');
+          setApellido('');
+          setCorreo('');
+          setCelular('');
+          setFechaContratacion('');
         } else {
           Alert.alert("Error", respuesta.data.message);
         }
@@ -97,13 +103,6 @@ const RegistrarVendedor = () => {
         value={numeroDocumento}
         onChangeText={setNumeroDocumento}
         keyboardType="numeric"
-      />
-
-      <Text style={styles.label}>Rol</Text>
-      <TextInput
-        style={styles.input}
-        value={rol}
-        onChangeText={setRol}
       />
 
       <Text style={styles.label}>Nombres</Text>

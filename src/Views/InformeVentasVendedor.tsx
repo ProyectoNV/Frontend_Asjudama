@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import axios from 'axios';
 
 interface Vendedor {
   nombre: string;
@@ -8,41 +9,43 @@ interface Vendedor {
 }
 
 interface Venta {
-  id: number;
-  fecha: string;
-  monto: number;
-  producto: string;
+  numero_factura_venta: number;
+  fecha_factura: string;
+  total_factura: number;
 }
 
-const InformeVentasVendedor: React.FC = () => {
+const InformeVentasVendedor = () => {
   const [numeroDocumento, setNumeroDocumento] = useState<string>('');
   const [vendedor, setVendedor] = useState<Vendedor | null>(null);
   const [totalVentas, setTotalVentas] = useState<number>(0);
   const [ventas, setVentas] = useState<Venta[]>([]);
 
-  const handleBuscar = () => {
+  const handleBuscar = async () => {
     if (!numeroDocumento) {
-      Alert.alert("Error", "Por favor ingrese el número de documento.");
+      Alert.alert('Error', 'Por favor ingrese el número de documento.');
       return;
     }
 
-    // Simulamos la búsqueda de datos del vendedor, total de ventas y ventas.
-    // En una aplicación real, aquí se haría una solicitud a una API.
-    const vendedorMock: Vendedor = {
-      nombre: "Carlos Martínez",
-      correo: "carlos.martinez@example.com",
-      celular: "0987654321",
-    };
-    const totalVentasMock = 15000; // Total de ventas
-    const ventasMock: Venta[] = [
-      { id: 1, fecha: "2024-05-01", monto: 3000, producto: "Producto A" },
-      { id: 2, fecha: "2024-05-10", monto: 5000, producto: "Producto B" },
-      { id: 3, fecha: "2024-05-20", monto: 7000, producto: "Producto C" },
-    ];
+    try {
+      // Hacer la solicitud al backend
+      const response = await axios.get(`http://localhost:4000/admin/informeVendedor/${numeroDocumento}`);
+      const data = response.data;
 
-    setVendedor(vendedorMock);
-    setTotalVentas(totalVentasMock);
-    setVentas(ventasMock);
+      if (data) {
+        setVendedor({
+          nombre: `${data.infoVendedor.Nombres} ${data.infoVendedor.Apellidos}`,
+          correo: data.infoVendedor.correo,
+          celular: data.infoVendedor.celular,
+        });
+        setTotalVentas(data.totalVentas);
+        setVentas(data.datosFacturas);
+      } else {
+        Alert.alert("Error", "No se encontró el cliente.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Ocurrió un error al buscar el cliente.");
+    }
   };
 
   return (
@@ -58,37 +61,25 @@ const InformeVentasVendedor: React.FC = () => {
       />
 
       <TouchableOpacity 
-        style={[styles.button, { backgroundColor: 'red' }]} 
+        style={styles.button} 
         onPress={handleBuscar}
       >
         <Text style={styles.buttonText}>Buscar</Text>
       </TouchableOpacity>
 
       {vendedor && (
-        <View style={styles.vendedorContainer}>
-          <Text style={styles.subTitle}>Datos del Vendedor</Text>
-          <Text>Nombre: {vendedor.nombre}</Text>
-          <Text>Correo: {vendedor.correo}</Text>
-          <Text>Celular: {vendedor.celular}</Text>
-        </View>
-      )}
-
-      {totalVentas > 0 && (
-        <View style={styles.totalVentasContainer}>
-          <Text style={styles.subTitle}>Total de Ventas</Text>
-          <Text>{totalVentas} pesos colombianos</Text>
-        </View>
-      )}
-
-      {ventas.length > 0 && (
-        <View style={styles.ventasContainer}>
-          <Text style={styles.subTitle}>Detalle de Ventas</Text>
+        <View>
+          <Text style={styles.label}>Nombre: {vendedor.nombre}</Text>
+          <Text style={styles.label}>Correo: {vendedor.correo}</Text>
+          <Text style={styles.label}>Celular: {vendedor.celular}</Text>
+          <Text style={styles.label}>Total Ventas: {totalVentas} pesos colombianos</Text>
+          
+          <Text style={styles.facturaHeader}>Ventas:</Text>
           {ventas.map((venta) => (
-            <View key={venta.id} style={styles.venta}>
-              <Text>Venta ID: {venta.id}</Text>
-              <Text>Fecha: {venta.fecha}</Text>
-              <Text>Producto: {venta.producto}</Text>
-              <Text>Monto: ${venta.monto}</Text>
+            <View key={venta.numero_factura_venta} style={styles.facturaContainer}>
+              <Text style={styles.facturaText}>Venta ID: {venta.numero_factura_venta}</Text>
+              <Text style={styles.facturaText}>Fecha: {venta.fecha_factura}</Text>
+              <Text style={styles.facturaText}>Monto: ${venta.total_factura}</Text>
             </View>
           ))}
         </View>
@@ -100,11 +91,12 @@ const InformeVentasVendedor: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    backgroundColor: '#f7f7f7',
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: "#05bcc1",
+    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -121,39 +113,37 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
+    backgroundColor: 'white',
   },
   button: {
-    backgroundColor: 'red',
+    backgroundColor: '#05bcc1',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  vendedorContainer: {
+  facturaHeader: {
     marginTop: 20,
-  },
-  totalVentasContainer: {
-    marginTop: 20,
-  },
-  ventasContainer: {
-    marginTop: 20,
-  },
-  subTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    textDecorationLine: 'underline',
   },
-  venta: {
+  facturaContainer: {
+    marginTop: 10,
     padding: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
+  },
+  facturaText: {
+    fontSize: 16,
+    color: '#333',
   },
 });
 
