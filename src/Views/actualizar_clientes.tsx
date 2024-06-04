@@ -58,7 +58,7 @@ const HistorialUser: React.FC = () => {
         }
 
         try {
-            const respuesta = await axios.put(`http://192.168.1.9:4000/vendedor/actualizarClientes`, Historial);
+            const respuesta = await axios.put(`http://192.168.1.59:4000/vendedor/actualizarClientes`, Historial);
             if (respuesta.status === 200) {
                 setHistorial({
                     pkfk_tdoc: '',
@@ -80,7 +80,7 @@ const HistorialUser: React.FC = () => {
     const handleEstado = async () => {
         const nuevoEstado = Historial.estado === '1' ? '0' : '1'; // Cambia el estado actual
         try {
-            const respuesta = await axios.put(`http://192.168.1.9:4000/vendedor/actualizarEstado/${Historial.numero_id}`, { estado: nuevoEstado });
+            const respuesta = await axios.put(`http://192.168.1.59:4000/vendedor/actualizarEstado/${Historial.numero_id}`, { estado: nuevoEstado });
             if (respuesta.status === 200) {
                 setHistorial({
                     pkfk_tdoc: '',
@@ -102,7 +102,7 @@ const HistorialUser: React.FC = () => {
 
     const handleBuscar = async () => {
         try {
-            const respuesta = await axios.get(`http://192.168.1.9:4000/vendedor/consultar_id/${Historial.numero_id}`);
+            const respuesta = await axios.get(`http://192.168.1.59:4000/vendedor/consultar_id/${Historial.numero_id}`);
             if (respuesta.status === 200) {
                 setHistorial(respuesta.data);
             } else {

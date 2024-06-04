@@ -42,7 +42,7 @@ const RegisterForm: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://192.168.1.9:4000/vendedor/registarClientes', {
+      const response = await axios.post('http://192.168.1.59:4000/vendedor/registarClientes', {
         pkfk_tdoc: tdoc,
         numero_id: identificacion,
         Nombres: username,
@@ -123,9 +123,8 @@ const RegisterForm: React.FC = () => {
             onValueChange={(itemValue) => setTdoc(itemValue)}
           >
             <Picker.Item label="Tipo de documento" value="" />
-            <Picker.Item label="CC" value="CC" />
-            <Picker.Item label="RC" value="RC" />
-            <Picker.Item label="PP" value="PP" />
+            <Picker.Item label="CC Cedula de cidadania" value="CC" />
+            <Picker.Item label="CE Cedula de extranjeria" value="CE" />
           </Picker>
         </View>
         <TextInput
