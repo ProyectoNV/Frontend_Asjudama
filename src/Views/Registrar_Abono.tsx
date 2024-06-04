@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput , Alert} from 'react-native';
 import { useNavigation, NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
@@ -40,21 +40,32 @@ const AgregarAbono = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Error en la solicitud');
+                const errorData = await response.json();
+                if (response.status === 400 && errorData.error === "La factura ya está pagada") {
+                    Alert.alert(
+                        "Error",
+                        "La factura ya está pagada y no se puede registrar un nuevo abono.",
+                        [{ text: "OK" }]
+                    );
+                } else {
+                    throw new Error('Error en la solicitud');
+                }
+                return;
             }
-
+    
             const result = await response.json();
             console.log(result.message);
-
+    
             // Limpiar el campo
             setValorAbono("");
-
+   
             // Actualizar la lista de abonos
             setListUpdated(true);
         } catch (error) {
             console.log('Error al registrar el abono:', error);
         }
     };
+    
 
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -79,9 +90,9 @@ const AgregarAbono = () => {
             <View style={styles.container}>
                 <Text style={styles.titlei}>Abonos de la Factura</Text>
                 <View>
-                    {listabonos.map((abono: { id_abono: number; numero_factura_abono: number; valor_abono: string; fecha_abono: string}) => (
+                    {listabonos.map((abono: { id_abono: number; numero_factura_abono: number; valor_abono: string; fecha_abono: string}, index) => (
                         <View key={abono.id_abono} style={styles.zoneContainer}>
-                            <Text style={styles.zoneText}>Numero abono: {abono.numero_factura_abono}</Text>
+                            <Text style={styles.zoneText}>Abono Numero: {index + 1}</Text>
                             <Text style={styles.zoneText}>Valor: {abono.valor_abono}</Text>
                             <Text style={styles.zoneText}>Fecha: {formatDate(abono.fecha_abono)}</Text>
                         </View>

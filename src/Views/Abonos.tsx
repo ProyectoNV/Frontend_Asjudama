@@ -6,6 +6,7 @@ import { RootStackParamList } from '../../App';
 const RegisterAbono = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [abonos, setAbonos] = useState([]);
+    const [factupaga, setFactupaga] = useState([]);
     const [idclient, setIdclient] = useState("");
     const [tdoc, setTdoc] = useState(""); // Nuevo estado para el tipo de documento
     const [vendedorid, setVendedorid] = useState("2"); // ID del vendedor (puede ajustarse según sea necesario)
@@ -25,8 +26,24 @@ const RegisterAbono = () => {
         }
     };
 
+    const handleBuscarpaga = async () => {
+        if (idclient && tdoc) { 
+            try {
+                const response = await fetch(`http://192.168.209.37:4000/vendedor/buscar_facturapaga_cliente_vendedor/${vendedorid}/${tdoc}/${idclient}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const databonos = await response.json();
+                setFactupaga(databonos);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     useEffect(() => {
         handleBuscar();
+        handleBuscarpaga();
     }, [idclient, tdoc, vendedorid]); // Ejecutar useEffect cuando cambien estos valores
 
     const formatDate = (dateString: string) => {
@@ -37,7 +54,7 @@ const RegisterAbono = () => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.title}>Facturas Pendientes</Text>
+                <Text style={styles.title}>Registrar Abonos a Facturas</Text>
                 <View style={styles.buscar}>
                     <TextInput
                         style={styles.input}
@@ -55,6 +72,7 @@ const RegisterAbono = () => {
                         <Image source={require('../../imagenes/Buscar.png')} style={styles.buscarImage} />
                     </TouchableOpacity>
                 </View>
+                <Text style={styles.title}>Facturas Pendientes</Text>
                 <View>
                     {abonos.map((abon: { numero_factura_venta: number; fecha_factura: string; total_factura: number; estado_factura: number }) => (
                         <View key={abon.numero_factura_venta} style={styles.zoneContainer}>
@@ -63,6 +81,20 @@ const RegisterAbono = () => {
                             <Text style={styles.zoneText}>Fecha: {formatDate(abon.fecha_factura)}</Text>
                             <Text style={styles.zoneText}>Estado: Pendiente</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AgregarAbono', { id_factu: abon.numero_factura_venta })} style={styles.deleteButton}>
+                                <Text style={styles.deleteButtonText}>Hacer Abono</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))}
+                </View>
+                <Text style={styles.title}>Facturas Pagas</Text>
+                <View>
+                    {factupaga.map((paga: { numero_factura_venta: number; fecha_factura: string; total_factura: number; estado_factura: number }) => (
+                        <View key={paga.numero_factura_venta} style={styles.zoneContainer}>
+                            <Text style={styles.zoneText}>Numero: {paga.numero_factura_venta}</Text>
+                            <Text style={styles.zoneText}>Valor: {paga.total_factura}</Text>
+                            <Text style={styles.zoneText}>Fecha: {formatDate(paga.fecha_factura)}</Text>
+                            <Text style={styles.zoneText}>Estado: Pendiente</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('AgregarAbono', { id_factu: paga.numero_factura_venta })} style={styles.deleteButton}>
                                 <Text style={styles.deleteButtonText}>Hacer Abono</Text>
                             </TouchableOpacity>
                         </View>
