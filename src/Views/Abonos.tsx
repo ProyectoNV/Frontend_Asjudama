@@ -93,7 +93,7 @@ const RegisterAbono = () => {
                             <Text style={styles.zoneText}>Numero: {paga.numero_factura_venta}</Text>
                             <Text style={styles.zoneText}>Valor: {paga.total_factura}</Text>
                             <Text style={styles.zoneText}>Fecha: {formatDate(paga.fecha_factura)}</Text>
-                            <Text style={styles.zoneText}>Estado: Pendiente</Text>
+                            <Text style={styles.zoneText}>Estado: Paga</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AgregarAbono', { id_factu: paga.numero_factura_venta })} style={styles.deleteButton}>
                                 <Text style={styles.deleteButtonText}>Hacer Abono</Text>
                             </TouchableOpacity>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: '#85C1E9',
+        color: '#05bcc1',
     },
     zoneContainer: {
         backgroundColor: '#f5f5f5',

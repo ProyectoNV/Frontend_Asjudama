@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     },
     infoText: {
         paddingHorizontal: 20,
+        backgroundColor: '#fdf3ec',
     },
     contInfo: {
         marginBottom: 20,
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
+        color: '#ccc',
     },
     buttonFormuText: {
         color: '#fff',

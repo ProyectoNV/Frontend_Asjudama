@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 30,
-    color: '#85C1E9',
+    color: '#05bcc1',
   },
   formContainer: {
     marginBottom: 30,

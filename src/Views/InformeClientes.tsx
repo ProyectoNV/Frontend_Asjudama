@@ -51,6 +51,11 @@ const InformeClientes = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Reportes del Clientes</Text>
@@ -81,7 +86,7 @@ const InformeClientes = () => {
           {facturas.map((factura) => (
             <View key={factura.numero_factura_venta} style={styles.facturaContainer}>
               <Text style={styles.facturaText}>Factura #{factura.numero_factura_venta}</Text>
-              <Text style={styles.facturaText}>Fecha: {factura.fecha_factura}</Text>
+              <Text style={styles.facturaText}>Fecha: {formatDate(factura.fecha_factura)}</Text>
               <Text style={styles.facturaText}>Total factura: {factura.total_factura}</Text>
             </View>
           ))}
@@ -94,7 +99,7 @@ const InformeClientes = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#fdf3ec',
   },
   title: {
     fontSize: 24,
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#05bcc1',
+    backgroundColor: '#FF6347',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',

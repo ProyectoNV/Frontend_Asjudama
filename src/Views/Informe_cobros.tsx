@@ -95,12 +95,12 @@ const InformeCobros: React.FC = () => {
         );
     };
 
-    const formatFecha = (fecha: string) => {
-        const date = new Date(fecha);
-        return isNaN(date.getTime()) ? "Fecha no válida" : date.toLocaleDateString();
-    };
-
     const informe = isMensual ? informeMensual : informeDiario;
+
+    const formatDate = (dateString: string) => {
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+      };
 
     return (
         <ScrollView style={styles.container}>
@@ -139,7 +139,7 @@ const InformeCobros: React.FC = () => {
                         <Text>Nombre: {informe.nombres_vendedor}</Text>
                         <Text>Apellidos: {informe.apellidos_vendedor}</Text>
                         <Text>Número de Identificación: {informe.numero_identificacion}</Text>
-                        <Text>Fecha: {formatFecha(informe.fecha)}</Text>
+                        <Text>Fecha: {formatDate(informe.fecha)}</Text>
                         <Text>Total Cobrado: {informe.total_cobrado}</Text>
                         <Text style={styles.abonoTitle}>Abonos:</Text>
                         {informe.abonos.length > 0 ? (
@@ -148,7 +148,7 @@ const InformeCobros: React.FC = () => {
                                     <Text style={styles.abonoTitle}>Abono {index + 1}</Text>
                                     <Text>ID Abono: {abono.id_abono}</Text>
                                     <Text>Valor Abono: {abono.valor_abono}</Text>
-                                    <Text>Fecha Abono: {formatFecha(abono.fecha_abono)}</Text>
+                                    <Text>Fecha Abono: {abono.fecha_abono}</Text>
                                     <Text>Número Factura: {abono.numero_factura}</Text>
                                 </View>
                             ))
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ccc',
     },
     activeButton: {
-        backgroundColor: '#05bcc1',
+        backgroundColor: '#FF6347',
     },
     toggleText: {
         color: '#fff',

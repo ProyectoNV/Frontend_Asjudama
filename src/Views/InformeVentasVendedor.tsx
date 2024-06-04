@@ -28,7 +28,7 @@ const InformeVentasVendedor = () => {
 
     try {
       // Hacer la solicitud al backend
-      const response = await axios.get(`http://localhost:4000/admin/informeVendedor/${numeroDocumento}`);
+      const response = await axios.get(`http://192.168.209.37:4000/admin/informeVendedor/${numeroDocumento}`);
       const data = response.data;
 
       if (data) {
@@ -46,6 +46,11 @@ const InformeVentasVendedor = () => {
       console.error(error);
       Alert.alert("Error", "Ocurrió un error al buscar el cliente.");
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   return (
@@ -78,7 +83,7 @@ const InformeVentasVendedor = () => {
           {ventas.map((venta) => (
             <View key={venta.numero_factura_venta} style={styles.facturaContainer}>
               <Text style={styles.facturaText}>Venta ID: {venta.numero_factura_venta}</Text>
-              <Text style={styles.facturaText}>Fecha: {venta.fecha_factura}</Text>
+              <Text style={styles.facturaText}>Fecha: {formatDate(venta.fecha_factura)}</Text>
               <Text style={styles.facturaText}>Monto: ${venta.total_factura}</Text>
             </View>
           ))}
@@ -91,7 +96,7 @@ const InformeVentasVendedor = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#fdf3ec',
   },
   title: {
     fontSize: 24,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#05bcc1',
+    backgroundColor: '#FF6347',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',

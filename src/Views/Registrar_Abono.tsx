@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 20,
         textAlign: 'center',
-        color: '#85C1E9',
+        color: '#05bcc1',
     },
     titlei: {
         fontSize: 24,

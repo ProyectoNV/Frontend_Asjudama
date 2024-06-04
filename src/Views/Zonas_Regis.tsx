@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: '#85C1E9',
+        color: '#05bcc1',
     },
     zoneContainer: {
         backgroundColor: '#f5f5f5',

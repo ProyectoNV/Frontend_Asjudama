@@ -144,7 +144,7 @@ const RegistrarVendedor = () => {
       />
 
       <TouchableOpacity 
-        style={[styles.button, { backgroundColor: 'red' }]} 
+        style={styles.button} 
         onPress={handleSubmit}
       >
         <Text style={styles.buttonText}>Enviar</Text>
@@ -156,6 +156,7 @@ const RegistrarVendedor = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    backgroundColor: '#fdf3ec',
   },
   title: {
     fontSize: 24,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: 'red',
+    backgroundColor: '#FF6347',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
