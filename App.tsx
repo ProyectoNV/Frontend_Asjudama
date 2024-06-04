@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './src/Views/Login';
 import RegisterProduct from './src/Views/Registro_producto';
 import Productos_Lista from './src/Views/Lista_Productos';
+import InformeCobros from './src/Views/Informe_cobros';
 import ActualizarProduct from './src/Views/Actualizar_productos';
 import RegisterAbono from './src/Views/Abonos';
 import AgregarAbono from './src/Views/Registrar_Abono';
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   RegisterForm: {estado: boolean};
   Registrofor: {estado:boolean};
   lista_Zona: {estado:boolean};
+  InformeCobros: {estado:boolean};
   MainTabsAdmi: undefined;
   MainTabsVende: undefined;
   ProductStack: undefined;
@@ -56,6 +58,7 @@ const ProductStack = () => (
     <Stack.Screen name="ActualizarProduct" component={ActualizarProduct}/>
     <Stack.Screen name="Registrofor" component={Registrofor}/>
     <Stack.Screen name="lista_Zona" component={lista_Zona}/>
+    <Stack.Screen name="InformeCobros" component={InformeCobros}/>
   </Stack.Navigator>
 );
 
@@ -125,6 +128,17 @@ const MainTabsAdmi = () => (
         tabBarLabel: 'Clientes',
         tabBarIcon: ({ color, size }) => (
           <Icon name="people-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="InformeCobros"
+      component={InformeCobros}
+      options={{
+        title: 'Cobros',
+        tabBarLabel: 'Cobros',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="add-circle-outline" color={color} size={size} />
         ),
       }}
     />
