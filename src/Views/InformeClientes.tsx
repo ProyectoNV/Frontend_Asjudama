@@ -53,7 +53,7 @@ const InformeClientes = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Buscar Reportes del Cliente</Text>
+      <Text style={styles.title}>Reportes del Clientes</Text>
 
       <Text style={styles.label}>Número de Documento</Text>
       <TextInput
