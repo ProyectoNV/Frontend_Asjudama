@@ -7,6 +7,7 @@ import RegisterProduct from './src/Views/Registro_producto';
 import Productos_Lista from './src/Views/Lista_Productos';
 import ActualizarProduct from './src/Views/Actualizar_productos';
 import RegisterAbono from './src/Views/Abonos';
+import AgregarAbono from './src/Views/Registrar_Abono';
 import LogoutScreen from './src/Views/LogoutScreen';
 import InformeClientes from './src/Views/InformeClientes';
 import InformeVentasVendedor from './src/Views/InformeVentasVendedor';
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   RegisterProduct: { estado: boolean };
   Productos_Lista: {estado: boolean};
   ActualizarProduct: {id_producto: number};
+  AgregarAbono : {id_factu: number};
   RegisterAbono: { estado: boolean };
   InformeVentasVendedor: {estado: boolean};
   InformeClientes: {estado: boolean};
@@ -59,7 +61,8 @@ const ProductStack = () => (
 
 const AbonoStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="RegisterAbono" component={RegisterAbono} />
+    <Stack.Screen name="RegisterAbono" component={RegisterAbono}/>
+    <Stack.Screen name="AgregarAbono" component={AgregarAbono}/>
     <Stack.Screen name="HistorialUser" component={HistorialUser}/>
     <Stack.Screen name="RegisterForm" component={RegisterForm}/>
     <Stack.Screen name="ClienteInformacion" component={ClienteInformacion}/>
