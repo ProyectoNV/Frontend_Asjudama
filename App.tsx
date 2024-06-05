@@ -18,6 +18,7 @@ import Registrofor from './src/Views/Registrar_zona';
 import lista_Zona from './src/Views/Zonas_Regis';
 import RegisterForm from './src/Views/registro_cliente';
 import RegistrarVendedor from './src/Views/RegistrarVendedor';
+import Facturas from './src/Views/Registrar_factura';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export type RootStackParamList = {
@@ -36,6 +37,7 @@ export type RootStackParamList = {
   Registrofor: {estado:boolean};
   lista_Zona: {estado:boolean};
   InformeCobros: {estado:boolean};
+  Facturas: {estado: boolean};
   MainTabsAdmi: undefined;
   MainTabsVende: undefined;
   ProductStack: undefined;
@@ -66,6 +68,7 @@ const AbonoStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="RegisterAbono" component={RegisterAbono}/>
     <Stack.Screen name="AgregarAbono" component={AgregarAbono}/>
+    <Stack.Screen name="Facturas" component={Facturas}/>
     <Stack.Screen name="HistorialUser" component={HistorialUser}/>
     <Stack.Screen name="RegisterForm" component={RegisterForm}/>
     <Stack.Screen name="ClienteInformacion" component={ClienteInformacion}/>
@@ -189,6 +192,17 @@ const MainTabsVende = () => (
         tabBarLabel: 'Registrar Abonos',
         tabBarIcon: ({ color, size }) => (
           <Icon name="cash-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Facturas"
+      component={Facturas}
+      options={{
+        title: 'Facturas',
+        tabBarLabel: 'Facturas',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="receipt-outline" color={color} size={size} />
         ),
       }}
     />
