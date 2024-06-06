@@ -1,33 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
-interface ClienteData {
-    Nombres: string;
-    Apellidos: string;
-    correo: string;
-    celular: string;
-    direccion: string;
-}
-
-const RegisterAbono = () => {
+const facturasgenerar = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [abonos, setAbonos] = useState([]);
     const [factupaga, setFactupaga] = useState([]);
     const [idclient, setIdclient] = useState("");
-    const [tdoc, setTdoc] = useState("");
-    const [clienteData, setClienteData] = useState<ClienteData | null>(null);
-    const [vendedorid, setVendedorid] = useState("2");
+    const [tdoc, setTdoc] = useState(""); // Nuevo estado para el tipo de documento
+    const [vendedorid, setVendedorid] = useState("2"); // ID del vendedor (puede ajustarse según sea necesario)
 
     const handleBuscar = async () => {
-        if (idclient && tdoc) {
+        if (idclient && tdoc) { // Solo ejecutar si ambos valores están presentes
             try {
                 const response = await fetch(`http://192.168.209.37:4000/vendedor/buscar_factura_cliente_vendedor/${vendedorid}/${tdoc}/${idclient}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                const databonos = await response.json();
+                const databonos = await response.json(); // Parsear directamente como JSON
                 setAbonos(databonos);
             } catch (error) {
                 console.log(error);
@@ -36,7 +27,7 @@ const RegisterAbono = () => {
     };
 
     const handleBuscarpaga = async () => {
-        if (idclient && tdoc) {
+        if (idclient && tdoc) { 
             try {
                 const response = await fetch(`http://192.168.209.37:4000/vendedor/buscar_facturapaga_cliente_vendedor/${vendedorid}/${tdoc}/${idclient}`);
                 if (!response.ok) {
@@ -50,31 +41,50 @@ const RegisterAbono = () => {
         }
     };
 
-    const ObtenerClienteData = async () => {
-        if (idclient && tdoc) {
-            try {
-                const response = await fetch(`http://192.168.209.37:4000/vendedor/datosCliente/${idclient}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setClienteData(data.cliente);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
-
     useEffect(() => {
         handleBuscar();
         handleBuscarpaga();
-        ObtenerClienteData();
-    }, [idclient, tdoc]);
+    }, [idclient, tdoc, vendedorid]); // Ejecutar useEffect cuando cambien estos valores
 
     const formatDate = (dateString: string) => {
-        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
     };
+
+    const EnviarMensaje = (phoneNumber: string, text: string) => {
+        const link = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+        Linking.canOpenURL(link).then((supported) => {
+            if (!supported){
+                Alert.alert("Por favor instale Whatsapp para enviar un mensaje directo");
+                return;
+            }
+            return Linking.openURL(link);
+        })
+    };
+
+    const EnviarinfoFactura = async (numero_factura: number) => {
+        try {
+            const response = await fetch(`http://192.168.209.37:4000/vendedor/ObtenerdataFactura/${numero_factura}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.success) {
+                const factura = data.factura;
+                let mensaje = `Factura No: ${factura.numero_factura_venta}\nCliente: ${factura.nombre_cliente}\nVendedor: ${factura.nombre_vendedor}\nFecha: ${formatDate(factura.fecha_factura)}\nTotal: ${factura.total_factura}\nEstado: ${factura.estado_factura === 1 ? 'Pagada' : 'Pendiente'}\nProductos:\n`;
+                factura.productos.forEach((producto: { nombre_producto: string; cantidad_producto: number; valor_unitario: number }) => { // Ajuste aquí
+                    mensaje += `  - ${producto.nombre_producto}: ${producto.cantidad_producto} x ${producto.valor_unitario}\n`;
+                });
+                EnviarMensaje(`57${factura.celular_cliente}`, mensaje);
+            } else {
+                Alert.alert("Error", "No se pudo obtener la información de la factura.");
+            }
+        } catch (error) {
+            console.error('Error al obtener la factura:', error);
+            Alert.alert("Error", "No se pudo obtener la información de la factura.");
+        }
+    };
+    
 
     return (
         <ScrollView>
@@ -93,18 +103,8 @@ const RegisterAbono = () => {
                         value={idclient}
                         placeholder="Ingrese número de documento del cliente"
                     />
-                    <TouchableOpacity style={styles.buscarIcon} onPress={() => { handleBuscar(); handleBuscarpaga(); ObtenerClienteData(); }}>
-                        <Image source={require('../../imagenes/Buscar.png')} style={styles.buscarImage} />
-                    </TouchableOpacity>
+                    
                 </View>
-                {clienteData && (
-                    <View style={styles.clienteInfo}>
-                        <Text style={styles.clienteText}>Nombre: {clienteData.Nombres} {clienteData.Apellidos}</Text>
-                        <Text style={styles.clienteText}>Correo: {clienteData.correo}</Text>
-                        <Text style={styles.clienteText}>Celular: {clienteData.celular}</Text>
-                        <Text style={styles.clienteText}>Dirección: {clienteData.direccion}</Text>
-                    </View>
-                )}
                 <Text style={styles.title}>Facturas Pendientes</Text>
                 <View>
                     {abonos.map((abon: { numero_factura_venta: number; fecha_factura: string; total_factura: number; estado_factura: number }) => (
@@ -113,8 +113,8 @@ const RegisterAbono = () => {
                             <Text style={styles.zoneText}>Valor: {abon.total_factura}</Text>
                             <Text style={styles.zoneText}>Fecha: {formatDate(abon.fecha_factura)}</Text>
                             <Text style={styles.zoneText}>Estado: Pendiente</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('AgregarAbono', { id_factu: abon.numero_factura_venta, valor_factu: abon.total_factura, celularclient: clienteData?.celular ?? '' })} style={styles.deleteButton}>
-                                <Text style={styles.deleteButtonText}>Hacer Abono</Text>
+                            <TouchableOpacity  onPress={() => EnviarinfoFactura(abon.numero_factura_venta)}  style={styles.deleteButton}>
+                                <Text style={styles.deleteButtonText}>Enviar Factura</Text>
                             </TouchableOpacity>
                         </View>
                     ))}
@@ -126,9 +126,9 @@ const RegisterAbono = () => {
                             <Text style={styles.zoneText}>Numero: {paga.numero_factura_venta}</Text>
                             <Text style={styles.zoneText}>Valor: {paga.total_factura}</Text>
                             <Text style={styles.zoneText}>Fecha: {formatDate(paga.fecha_factura)}</Text>
-                            <Text style={styles.zoneText}>Estado: Paga</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('AgregarAbono', { id_factu: paga.numero_factura_venta, valor_factu: paga.total_factura, celularclient: clienteData?.celular ?? '' })} style={styles.deleteButton}>
-                                <Text style={styles.deleteButtonText}>Hacer Abono</Text>
+                            <Text style={styles.zoneText}>Estado: Pendiente</Text>
+                            <TouchableOpacity onPress={() => EnviarinfoFactura(paga.numero_factura_venta)} style={styles.deleteButton}>
+                                <Text style={styles.deleteButtonText}>Enviar Factura</Text>
                             </TouchableOpacity>
                         </View>
                     ))}
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: '#05bcc1',
+        color: '#85C1E9',
     },
     zoneContainer: {
         backgroundColor: '#f5f5f5',
@@ -200,18 +200,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10, // Para dar espacio entre los inputs
     },
-    clienteInfo: {
-        marginBottom: 20,
-        padding: 10,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#D3D3D3',
-    },
-    clienteText: {
-        fontSize: 18,
-        color: '#333',
-    },
 });
 
-export default RegisterAbono;
+export default facturasgenerar;

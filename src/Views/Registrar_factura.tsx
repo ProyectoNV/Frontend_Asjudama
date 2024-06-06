@@ -59,9 +59,7 @@ const Facturas = () => {
 
             const data = await response.json();
             console.log(data);
-            if (!response.ok) {
-                Alert.alert('¡Éxito!', 'Factura registrada exitosamente');
-            }
+            Alert.alert('¡Éxito!', 'Factura registrada exitosamente');
         } catch (error) {
             console.error('Error al registrar factura:', error);
         }

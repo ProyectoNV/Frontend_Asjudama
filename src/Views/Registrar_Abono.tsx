@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput , Alert} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput , Alert, Linking} from 'react-native';
 import { useNavigation, NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
 const AgregarAbono = () => {
     const route = useRoute<RouteProp<RootStackParamList, 'AgregarAbono'>>();
-    const { id_factu } = route.params;
+    const { id_factu, valor_factu, celularclient} = route.params;
     const [listUpdated, setListUpdated] = useState(false);
     const [listabonos, setListabonos] = useState([]);
     const [valorAbono, setValorAbono] = useState("");
@@ -23,6 +23,18 @@ const AgregarAbono = () => {
         BuscarAbonos();
         setListUpdated(false);
     }, [listUpdated]);
+
+    const EnviarMensaje = (phoneNumber: string, text: string) => {
+        const link = `https://wa.me/${phoneNumber}?text=${text}`
+        Linking.canOpenURL(link).then((supported) => {
+            if (!supported){
+                Alert.alert("Por favor instale Whatsapp para enviar un mensaje directo")
+                return
+            }
+            return Linking.openURL(link)
+        })
+        
+    }
 
     const handleRegistrarAbono = async () => {
         if (!valorAbono) {
@@ -61,6 +73,13 @@ const AgregarAbono = () => {
    
             // Actualizar la lista de abonos
             setListUpdated(true);
+
+            // Formatear y enviar el mensaje
+            const mensaje = `*Asjudama* le informa del registro de un abono con valor de *${valorAbono}* a su factura número *${id_factu}* que tiene un valor neto de *${valor_factu}*`;
+
+            EnviarMensaje(`57${celularclient}`, mensaje);
+
+        
         } catch (error) {
             console.log('Error al registrar el abono:', error);
         }

@@ -19,6 +19,7 @@ import lista_Zona from './src/Views/Zonas_Regis';
 import RegisterForm from './src/Views/registro_cliente';
 import RegistrarVendedor from './src/Views/RegistrarVendedor';
 import Facturas from './src/Views/Registrar_factura';
+import facturasgenerar from './src/Views/GeneFactura';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export type RootStackParamList = {
@@ -26,7 +27,7 @@ export type RootStackParamList = {
   RegisterProduct: { estado: boolean };
   Productos_Lista: {estado: boolean};
   ActualizarProduct: {id_producto: number};
-  AgregarAbono : {id_factu: number};
+  AgregarAbono : {id_factu: number, valor_factu: number, celularclient: string};
   RegisterAbono: { estado: boolean };
   InformeVentasVendedor: {estado: boolean};
   InformeClientes: {estado: boolean};
@@ -38,6 +39,7 @@ export type RootStackParamList = {
   lista_Zona: {estado:boolean};
   InformeCobros: {estado:boolean};
   Facturas: {estado: boolean};
+  facturasgenerar: {estado: boolean};
   MainTabsAdmi: undefined;
   MainTabsVende: undefined;
   ProductStack: undefined;
@@ -69,6 +71,7 @@ const AbonoStack = () => (
     <Stack.Screen name="RegisterAbono" component={RegisterAbono}/>
     <Stack.Screen name="AgregarAbono" component={AgregarAbono}/>
     <Stack.Screen name="Facturas" component={Facturas}/>
+    <Stack.Screen name="facturasgenerar" component={facturasgenerar}/>
     <Stack.Screen name="HistorialUser" component={HistorialUser}/>
     <Stack.Screen name="RegisterForm" component={RegisterForm}/>
     <Stack.Screen name="ClienteInformacion" component={ClienteInformacion}/>
@@ -203,6 +206,17 @@ const MainTabsVende = () => (
         tabBarLabel: 'Facturas',
         tabBarIcon: ({ color, size }) => (
           <Icon name="receipt-outline" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="facturasgenerar"
+      component={facturasgenerar}
+      options={{
+        title: 'Enviar Factura',
+        tabBarLabel: 'Enviar Factura',
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="paper-plane-outline" color={color} size={size} />
         ),
       }}
     />
