@@ -18,6 +18,7 @@ import Registrofor from './src/Views/Registrar_zona';
 import lista_Zona from './src/Views/Zonas_Regis';
 import RegisterForm from './src/Views/registro_cliente';
 import RegistrarVendedor from './src/Views/RegistrarVendedor';
+import MostrarVendedores from './src/Views/mostrarVendedores';
 import Facturas from './src/Views/Registrar_factura';
 import facturasgenerar from './src/Views/GeneFactura';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   InformeVentasVendedor: {estado: boolean};
   InformeClientes: {estado: boolean};
   RegistrarVendedor: {estado: boolean};
+  MostrarVendedores: {estado: boolean};
   HistorialUser: {estado: boolean};
   ClienteInformacion: {estado: boolean};
   RegisterForm: {estado: boolean};
@@ -58,6 +60,7 @@ const ProductStack = () => (
     <Stack.Screen name="InformeVentasVendedor" component={InformeVentasVendedor}/>
     <Stack.Screen name="InformeClientes" component={InformeClientes}/>
     <Stack.Screen name="RegistrarVendedor" component={RegistrarVendedor}/>
+    <Stack.Screen name="MostrarVendedores" component={MostrarVendedores}/>
     <Stack.Screen name="Productos_Lista" component={Productos_Lista}/>
     <Stack.Screen name="ActualizarProduct" component={ActualizarProduct}/>
     <Stack.Screen name="Registrofor" component={Registrofor}/>

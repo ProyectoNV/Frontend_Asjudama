@@ -2,14 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const facturasgenerar = () => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [abonos, setAbonos] = useState([]);
     const [factupaga, setFactupaga] = useState([]);
     const [idclient, setIdclient] = useState("");
-    const [tdoc, setTdoc] = useState(""); // Nuevo estado para el tipo de documento
-    const [vendedorid, setVendedorid] = useState("2"); // ID del vendedor (puede ajustarse según sea necesario)
+    const [tdoc, setTdoc] = useState(""); 
+    const [vendedorid, setVendedorid] = useState(null); 
+
+    const obtenerVendedorId = async () => {
+        try {
+            const storedUserData = await AsyncStorage.getItem('sesionusuario');
+            if (storedUserData) {
+                const parsedUserData = JSON.parse(storedUserData);
+                setVendedorid(parsedUserData.id);
+            }
+        } catch (error) {
+            console.error('Error al obtener vendedor_id:', error);
+        }
+    };
 
     const handleBuscar = async () => {
         if (idclient && tdoc) { // Solo ejecutar si ambos valores están presentes
@@ -42,6 +55,7 @@ const facturasgenerar = () => {
     };
 
     useEffect(() => {
+        obtenerVendedorId();
         handleBuscar();
         handleBuscarpaga();
     }, [idclient, tdoc, vendedorid]); // Ejecutar useEffect cuando cambien estos valores

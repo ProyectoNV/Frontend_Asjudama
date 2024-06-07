@@ -33,7 +33,7 @@ const LoginScreen = () => {
 
       if (result.success) {
         const datausuario = JSON.stringify(result.usuario);
-        await AsyncStorage.setItem('pruebasesion', datausuario);
+        await AsyncStorage.setItem('sesionusuario', datausuario);
         Alerta('Éxito', 'Inicio de sesión exitoso');
 
         setTimeout(() => {

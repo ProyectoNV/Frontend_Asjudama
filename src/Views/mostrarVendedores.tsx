@@ -19,7 +19,7 @@ const MostrarVendedores = () => {
 
     const obtenerVendedores = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/admin/Vendedores');
+            const response = await axios.get('http://192.168.209.37:4000/admin/Vendedores');
             setVendedores(response.data);
         } catch (error) {
             console.error(error);
@@ -37,7 +37,7 @@ const MostrarVendedores = () => {
 
     const eliminarVendedor = async(vendedor: Vendedor) => {
         try {
-            const response = await axios.put(`http://localhost:4000/admin/ElimiVendedor/${vendedor.id_usuario}`);
+            const response = await axios.put(`http://192.168.209.37:4000/admin/ElimiVendedor/${vendedor.id_usuario}`);
             console.log(response.data);
             obtenerVendedores();  // Actualizar la lista de vendedores después de la eliminación
         } catch (error) {
@@ -49,7 +49,7 @@ const MostrarVendedores = () => {
         if (!vendedorAEditar) return;
 
         try {
-            const response = await axios.put(`http://localhost:4000/admin/ActuVendedores/${vendedorAEditar.id_usuario}`, vendedorAEditar);
+            const response = await axios.put(`http://192.168.209.37:4000/admin/ActuVendedores/${vendedorAEditar.id_usuario}`, vendedorAEditar);
             console.log(response.data);
             setModalVisible(false);
             obtenerVendedores();  // Actualizar la lista de vendedores después de la edición
@@ -96,6 +96,9 @@ const MostrarVendedores = () => {
             />
 
             <Modal visible={modalVisible} animationType="slide">
+                <TouchableOpacity style={styles.viewButton} onPress={() => setModalVisible(false)}>
+                    <Text style={styles.viewButtonText}>Ver Zonas</Text>
+                </TouchableOpacity>
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalTitle}>Editar Vendedor</Text>
                     <TextInput
@@ -216,6 +219,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    viewButton: {
+        alignSelf: 'flex-end',
+        marginBottom: 20,
+      },
+      viewButtonText: {
+        color: '#05bcc1',
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
 });
 
 export default MostrarVendedores;

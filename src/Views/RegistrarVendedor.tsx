@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../App';
+
 const RegistrarVendedor = () => {
   const [tipoDocumento, setTipoDocumento] = useState('');
   const [numeroDocumento, setNumeroDocumento] = useState('');
@@ -10,6 +13,8 @@ const RegistrarVendedor = () => {
   const [correo, setCorreo] = useState('');
   const [celular, setCelular] = useState('');
   const [fechaContratacion, setFechaContratacion] = useState('');
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const validarFormulario = () => {
     if (!tipoDocumento || !numeroDocumento || !nombres || !apellido || !correo || !celular || !fechaContratacion) {
@@ -83,6 +88,9 @@ const RegistrarVendedor = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.viewButton} onPress={() => navigation.navigate('MostrarVendedores', { estado: true })}>
+        <Text style={styles.viewButtonText}>Ver Zonas</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Registro de vendedor</Text>
       
       <Text style={styles.label}>Tipo Documento</Text>
@@ -188,6 +196,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  viewButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  },
+  viewButtonText: {
+    color: '#05bcc1',
     fontSize: 18,
     fontWeight: 'bold',
   },

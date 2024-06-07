@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet , Alert} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Define the Product type
+
 type Product = {
     id_producto: number;
     nombre_producto: string;
-    // Add other properties if needed
 };
 
 const Facturas = () => {
@@ -15,9 +15,23 @@ const Facturas = () => {
     const [selectedProduct, setSelectedProduct] = useState<string>('');
     const [cantidadProducto, setCantidadProducto] = useState<string>('');
     const [productosSeleccionados, setProductosSeleccionados] = useState<(Product & { cantidad: number })[]>([]);
+    const [vendedorId, setVendedorId] = useState(null);
+
+    const obtenerVendedorId = async () => {
+        try {
+            const storedUserData = await AsyncStorage.getItem('sesionusuario');
+            if (storedUserData) {
+                const parsedUserData = JSON.parse(storedUserData);
+                setVendedorId(parsedUserData.id);
+            }
+        } catch (error) {
+            console.error('Error al obtener vendedor_id:', error);
+        }
+    };
 
     useEffect(() => {
         fetchProductos();
+        obtenerVendedorId();
     }, []);
 
     const fetchProductos = async () => {
@@ -43,9 +57,15 @@ const Facturas = () => {
 
     const handleRegistrarFactura = async () => {
         try {
+
+            if (!vendedorId) {
+                Alert.alert('Error', 'No se pudo obtener el ID del vendedor');
+                return;
+            }
+
             const facturaData = {
                 numero_documento_cliente: numeroDocumentoCliente,
-                vendedor_id: '2',
+                vendedor_id: vendedorId,
                 productos: productosSeleccionados.map(p => ({ id: p.id_producto, cantidad: p.cantidad })),
             };
 
@@ -67,9 +87,6 @@ const Facturas = () => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.viewButton}>
-                <Text style={styles.viewButtonText}>Ver Facturas</Text>
-            </TouchableOpacity>
             <Text style={styles.title}>Registro de Factura</Text>
             <View style={styles.formContainer}>
                 <View style={styles.row}>

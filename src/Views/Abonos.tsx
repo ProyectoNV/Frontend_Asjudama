@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ClienteData {
     Nombres: string;
@@ -18,7 +19,19 @@ const RegisterAbono = () => {
     const [idclient, setIdclient] = useState("");
     const [tdoc, setTdoc] = useState("");
     const [clienteData, setClienteData] = useState<ClienteData | null>(null);
-    const [vendedorid, setVendedorid] = useState("2");
+    const [vendedorid, setVendedorid] = useState(null);
+
+    const obtenerVendedorId = async () => {
+        try {
+            const storedUserData = await AsyncStorage.getItem('sesionusuario');
+            if (storedUserData) {
+                const parsedUserData = JSON.parse(storedUserData);
+                setVendedorid(parsedUserData.id);
+            }
+        } catch (error) {
+            console.error('Error al obtener vendedor_id:', error);
+        }
+    };
 
     const handleBuscar = async () => {
         if (idclient && tdoc) {
@@ -66,9 +79,11 @@ const RegisterAbono = () => {
     };
 
     useEffect(() => {
+        obtenerVendedorId();
+        ObtenerClienteData();
         handleBuscar();
         handleBuscarpaga();
-        ObtenerClienteData();
+        
     }, [idclient, tdoc]);
 
     const formatDate = (dateString: string) => {
